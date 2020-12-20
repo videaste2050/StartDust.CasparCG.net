@@ -55,6 +55,7 @@ namespace StarDust.CasparCG.net.Connection
             Client.SendDelimiter = LineDelimiter;
             Client.ConnectedEvent += Client_ConnectedEvent;
             Client.DisconnectedEvent += Client_DisconnectedEvent;
+            Client.ConnectionLost += Client_ConnectionLost;
             Client.DataReceived += Client_DataReceived;
         }   
 
@@ -148,7 +149,11 @@ namespace StarDust.CasparCG.net.Connection
         {
             ConnectionStateChanged?.Invoke(this, new ConnectionEventArgs(ConnectionSettings.Hostname, ConnectionSettings.Port, true));
         }
-
+        
+        private void Client_ConnectionLost(object sender, EventArgs e)
+        {
+            ConnectionStateChanged?.Invoke(this, new ConnectionEventArgs(ConnectionSettings.Hostname, ConnectionSettings.Port, false));
+        }
 
         private void Client_DataReceived(object sender, Message e)
         {
